@@ -1,4 +1,5 @@
 from deeplearning.layers import *
+from torch import relu_
 
 
 def affine_relu_forward(x, w, b):
@@ -59,6 +60,10 @@ def conv_relu_pool_forward(x, w, b, conv_param, pool_param):
     - out: Output from the pooling layer
     - cache: Object to give to the backward pass
     """
+    out_conv, cache_conv = conv_forward_naive(x, w, b, conv_param)
+    out_relu, cache_relu = relu_forward(out_conv)
+    out, cache_pool = max_pool_forward_naive(out_relu, pool_param)
+    cache = (cache_conv, cache_relu, cache_pool)
     return out, cache
 
 
@@ -66,4 +71,8 @@ def conv_relu_pool_backward(dout, cache):
     """
     Backward pass for the conv-relu-pool convenience layer
     """
+    cache_conv, cache_relu, cache_pool = cache
+    dout_pool = max_pool_backward_naive(dout, cache_pool)
+    dout_relu = relu_backward(dout_pool, cache_relu)
+    dx, dw, db = conv_backward_naive(dout_relu, cache_conv)
     return dx, dw, db
