@@ -41,5 +41,3 @@ The forward pass for spatial batch normalization is implemented in the `spatial_
 
 ### Backward Pass
 The backward pass for spatial batch normalization is implemented in the `spatial_batchnorm_backward` function. Gradient checking is used to validate the implementation.
-
-- Torch
